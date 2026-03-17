@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #020617; color: white; }
+        .sidebar { background: rgba(30, 41, 59, 0.5); backdrop-filter: blur(10px); }
+        .chat-bubble-ai { background: #1e293b; border-left: 4px solid #00d4ff; }
+        .chat-bubble-user { background: #0ea5e9; margin-left: auto; }
+        .glass { background: rgba(15, 23, 42, 0.8); border: 1px solid #1e40af; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+    <!-- Sidebar History -->
+    <div class="sidebar w-64 h-full p-4 border-r border-blue-900 hidden md:block">
+        <button class="w-full py-2 mb-4 border border-blue-400 rounded-lg hover:bg-blue-900 transition">+ New Chat</button>
+        <div class="history-list overflow-y-auto h-5/6">
+            <!-- Loop History from DB -->
+        </div>
+    </div>
+
+    <!-- Main Chat -->
+    <div class="flex-1 flex flex-col">
+        <header class="p-4 glass flex justify-between items-center">
+            <h1 class="font-bold text-xl tracking-widest text-blue-400">DevCORE - AI</h1>
+            <span class="text-xs">Secure Mode: ACTIVE</span>
+        </header>
+
+        <div id="chat-box" class="flex-1 overflow-y-auto p-6 space-y-4">
+            <!-- Chat Dynamic Content -->
+            <div class="chat-bubble-ai p-3 rounded-r-lg max-w-xl">Halo Tuan XdpzQ. DevCORE siap membantu.</div>
+        </div>
+
+        <div class="p-4 bg-slate-900">
+            <div class="flex gap-2 max-w-4xl mx-auto">
+                <input id="msg-input" type="text" class="flex-1 bg-slate-800 border border-blue-500 rounded-lg p-3 outline-none focus:ring-2 ring-blue-400" placeholder="Type command...">
+                <button onclick="sendMessage()" class="bg-blue-600 px-6 py-2 rounded-lg font-bold">SEND</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
