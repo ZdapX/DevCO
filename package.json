@@ -1,0 +1,15 @@
+{
+  "name": "devcore-ai",
+  "version": "1.0.0",
+  "main": "api/index.js",
+  "dependencies": {
+    "express": "^4.18.2",
+    "ejs": "^3.1.9",
+    "mongoose": "^7.3.1",
+    "axios": "^1.4.0",
+    "body-parser": "^1.20.2",
+    "cookie-parser": "^1.4.6",
+    "express-session": "^1.17.3",
+    "dotenv": "^16.3.1"
+  }
+}
