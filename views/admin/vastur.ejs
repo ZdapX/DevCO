@@ -1,0 +1,24 @@
+<div class="p-8">
+    <h1 class="text-3xl font-bold mb-8 text-blue-400 uppercase">Neural Personality Config</h1>
+    
+    <form action="/admin/vastur/update" method="POST" class="max-w-3xl space-y-6">
+        <div class="space-y-2">
+            <label class="text-blue-300">AI Personality Name</label>
+            <input type="text" name="aiName" value="DevCORE - AI" class="w-full bg-slate-900 p-3 rounded border border-blue-700 outline-none focus:border-blue-400">
+        </div>
+
+        <div class="space-y-2">
+            <label class="text-blue-300">System Instruction (Persona)</label>
+            <textarea name="persona" rows="8" class="w-full bg-slate-900 p-3 rounded border border-blue-700 outline-none focus:border-blue-400" 
+            placeholder="Contoh: Kamu adalah DevCORE, asisten cerdas milik XdpzQ yang ahli dalam cyber security..."></textarea>
+        </div>
+
+        <div class="p-4 bg-blue-900/20 border-l-4 border-blue-500 text-xs italic">
+            Note: Perubahan persona akan langsung mempengaruhi respons AI pada sesi berikutnya secara real-time.
+        </div>
+
+        <button class="bg-blue-600 hover:bg-blue-400 text-white font-bold py-3 px-8 rounded-lg transition-all shadow-lg shadow-blue-900/50">
+            SAVE NEURAL CORE
+        </button>
+    </form>
+</div>
