@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        body { background: #000; color: #00d4ff; font-family: 'Courier New', monospace; overflow: hidden; }
+        .boot-screen { display: flex; flex-direction: column; justify-content: center; height: 100vh; padding: 50px; }
+        .cursor { border-right: 2px solid #00d4ff; animation: blink 0.7s infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+    </style>
+</head>
+<body>
+    <div class="boot-screen" id="console">
+        <p>> INITIALIZING DevCORE-AI SYSTEM...</p>
+        <p>> OWNER: XdpzQ. AUTHENTICATING...</p>
+        <p id="status">> CHECKING SESSION...</p>
+    </div>
+    <script>
+        const userExist = <%= JSON.stringify(user) %>;
+        setTimeout(() => {
+            document.getElementById('status').innerText = userExist ? "> SESSION FOUND. REDIRECTING TO CORE..." : "> NO SESSION. BOOTING LOGIN INTERFACE...";
+            setTimeout(() => {
+                window.location.href = userExist ? "/chat" : "/masuk";
+            }, 2000);
+        }, 1500);
+    </script>
+</body>
+</html>
