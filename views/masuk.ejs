@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Core | DevCORE - AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #020617; color: #00d4ff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .cyber-card { background: rgba(15, 23, 42, 0.8); border: 1px solid #1e40af; box-shadow: 0 0 20px rgba(0, 212, 255, 0.2); backdrop-filter: blur(10px); }
+        .neon-input { background: #0f172a; border: 1px solid #3b82f6; transition: 0.3s; }
+        .neon-input:focus { border-color: #00d4ff; box-shadow: 0 0 10px #00d4ff; outline: none; }
+        .glitch { font-weight: bold; text-transform: uppercase; letter-spacing: 5px; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+    </style>
+</head>
+<body class="flex items-center justify-center h-screen">
+    <div class="cyber-card p-8 rounded-2xl w-full max-w-md text-center">
+        <h1 class="glitch text-2xl mb-6">TERMINAL ACCESS</h1>
+        <p class="text-xs text-blue-400 mb-8">Enter Authorization Key to bypass DevCORE security layer.</p>
+        
+        <form id="loginForm" class="space-y-6">
+            <input type="password" id="accessCode" name="code" placeholder="ACCESS KEY" 
+                   class="neon-input w-full p-4 rounded-lg text-center tracking-[1em]">
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-400 text-white font-bold py-3 rounded-lg transition-all transform hover:scale-105">
+                INITIALIZE SESSION
+            </button>
+        </form>
+        <div id="msg" class="mt-4 text-sm text-red-500"></div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const code = document.getElementById('accessCode').value;
+            const res = await fetch('/auth/login', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ code })
+            });
+            const data = await res.json();
+            if(data.status === 'success') window.location.href = data.redirect;
+            else document.getElementById('msg').innerText = "ACCESS DENIED: INVALID KEY";
+        };
+    </script>
+</body>
+</html>
