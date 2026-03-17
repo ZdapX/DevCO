@@ -1,9 +1,26 @@
 {
   "version": 2,
+  "name": "devcore-ai-system",
   "builds": [
-    { "src": "api/index.js", "use": "@vercel/node" }
+    {
+      "src": "api/index.js",
+      "use": "@vercel/node"
+    }
   ],
   "routes": [
-    { "src": "/(.*)", "dest": "api/index.js" }
-  ]
+    {
+      "src": "/(.*)",
+      "dest": "api/index.js",
+      "headers": {
+        "x-frame-options": "DENY",
+        "x-xss-protection": "1; mode=block",
+        "x-content-type-options": "nosniff",
+        "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+        "content-security-policy": "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; img-src 'self' data:; connect-src 'self' https://openrouter.ai;"
+      }
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  }
 }
