@@ -1,42 +1,210 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DevCORE - AI | Terminal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background-color: #020617; color: white; }
-        .sidebar { background: rgba(30, 41, 59, 0.5); backdrop-filter: blur(10px); }
-        .chat-bubble-ai { background: #1e293b; border-left: 4px solid #00d4ff; }
-        .chat-bubble-user { background: #0ea5e9; margin-left: auto; }
-        .glass { background: rgba(15, 23, 42, 0.8); border: 1px solid #1e40af; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap');
+        
+        body { 
+            background-color: #020617; 
+            color: #e2e8f0; 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow: hidden; /* Prevent body scroll, use container scroll */
+        }
+
+        .cyber-glass {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(30, 64, 175, 0.3);
+        }
+
+        .chat-container {
+            height: calc(100vh - 140px); /* Adjust based on header/footer height */
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #1e40af; border-radius: 10px; }
+
+        /* Bubble Styles */
+        .bubble-ai {
+            background: #1e293b;
+            border-bottom-left-radius: 2px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border-left: 3px solid #00d4ff;
+        }
+
+        .bubble-user {
+            background: linear-gradient(135deg, #1d4ed8, #1e40af);
+            border-bottom-right-radius: 2px;
+            box-shadow: 0 4px 15px rgba(29, 78, 216, 0.3);
+        }
+
+        /* Sidebar Transition */
+        #sidebar {
+            transition: transform 0.3s ease-in-out;
+            z-index: 50;
+        }
+
+        @media (max-width: 768px) {
+            #sidebar { transform: translateX(-100%); position: fixed; }
+            #sidebar.open { transform: translateX(0); }
+        }
     </style>
 </head>
-<body class="flex h-screen overflow-hidden">
-    <!-- Sidebar History -->
-    <div class="sidebar w-64 h-full p-4 border-r border-blue-900 hidden md:block">
-        <button class="w-full py-2 mb-4 border border-blue-400 rounded-lg hover:bg-blue-900 transition">+ New Chat</button>
-        <div class="history-list overflow-y-auto h-5/6">
-            <!-- Loop History from DB -->
+<body class="flex h-screen w-full overflow-hidden">
+
+    <!-- OVERLAY FOR MOBILE -->
+    <div id="overlay" class="fixed inset-0 bg-black/50 hidden z-40 transition-opacity" onclick="toggleSidebar()"></div>
+
+    <!-- SIDEBAR -->
+    <aside id="sidebar" class="w-72 h-full flex-shrink-0 cyber-glass border-r border-blue-900/50 flex flex-col">
+        <div class="p-6 border-b border-blue-900/30 flex justify-between items-center">
+            <span class="font-bold tracking-widest text-blue-400">HISTORY_CORE</span>
+            <button onclick="toggleSidebar()" class="md:hidden text-blue-400">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
-    </div>
-
-    <!-- Main Chat -->
-    <div class="flex-1 flex flex-col">
-        <header class="p-4 glass flex justify-between items-center">
-            <h1 class="font-bold text-xl tracking-widest text-blue-400">DevCORE - AI</h1>
-            <span class="text-xs">Secure Mode: ACTIVE</span>
-        </header>
-
-        <div id="chat-box" class="flex-1 overflow-y-auto p-6 space-y-4">
-            <!-- Chat Dynamic Content -->
-            <div class="chat-bubble-ai p-3 rounded-r-lg max-w-xl">Halo Tuan XdpzQ. DevCORE siap membantu.</div>
-        </div>
-
-        <div class="p-4 bg-slate-900">
-            <div class="flex gap-2 max-w-4xl mx-auto">
-                <input id="msg-input" type="text" class="flex-1 bg-slate-800 border border-blue-500 rounded-lg p-3 outline-none focus:ring-2 ring-blue-400" placeholder="Type command...">
-                <button onclick="sendMessage()" class="bg-blue-600 px-6 py-2 rounded-lg font-bold">SEND</button>
+        
+        <div class="p-4 flex-1 overflow-y-auto space-y-2">
+            <button class="w-full py-3 mb-4 rounded-xl bg-blue-600/20 border border-blue-500/50 text-blue-300 font-semibold hover:bg-blue-600/30 transition">
+                <i class="fas fa-plus mr-2"></i> New Session
+            </button>
+            
+            <!-- History List (Placeholder) -->
+            <div class="p-3 rounded-lg hover:bg-slate-800 cursor-pointer border border-transparent hover:border-blue-900/50 transition">
+                <p class="text-sm truncate">Analisis Vulnerability Kernel...</p>
+                <span class="text-[10px] text-slate-500">2 mins ago</span>
             </div>
         </div>
-    </div>
+
+        <div class="p-4 border-t border-blue-900/30">
+            <a href="/admin/ceo" class="flex items-center text-xs text-slate-400 hover:text-blue-400 transition">
+                <i class="fas fa-user-shield mr-2"></i> System Owner Dashboard
+            </a>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 flex flex-col relative w-full h-full">
+        
+        <!-- HEADER -->
+        <header class="w-full p-4 flex justify-between items-center cyber-glass border-b border-blue-900/30">
+            <div class="flex items-center gap-3">
+                <button onclick="toggleSidebar()" class="p-2 hover:bg-slate-800 rounded-lg text-blue-400">
+                    <i class="fas fa-bars-staggered text-xl"></i>
+                </button>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight tracking-tight">DevCORE <span class="text-blue-500">AI</span></h1>
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                        <span class="text-[10px] text-slate-400 uppercase tracking-widest">Neural Link Active</span>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center gap-4 text-slate-400">
+                <i class="fas fa-shield-halved hover:text-blue-400 cursor-pointer"></i>
+                <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-bold">
+                    XQ
+                </div>
+            </div>
+        </header>
+
+        <!-- CHAT AREA -->
+        <div id="chat-window" class="flex-1 overflow-y-auto p-4 md:p-8 space-y-6">
+            <!-- AI MESSAGE -->
+            <div class="flex justify-start animate-fade-in">
+                <div class="max-w-[85%] md:max-w-[70%] bubble-ai p-4 rounded-2xl text-sm leading-relaxed">
+                    <p>Lab DevCoreAI4 Aktif 👾. Selamat datang kembali, Tuan <b>XdpzQ</b>. Semua sistem siap beroperasi. Apa instruksi pertama Anda hari ini?</p>
+                </div>
+            </div>
+
+            <!-- USER MESSAGE -->
+            <div class="flex justify-end animate-fade-in">
+                <div class="max-w-[85%] md:max-w-[70%] bubble-user p-4 rounded-2xl text-sm leading-relaxed text-white">
+                    Tampilkan laporan status server dan enkripsi data.
+                </div>
+            </div>
+        </div>
+
+        <!-- INPUT AREA -->
+        <footer class="p-4 md:p-6 bg-transparent">
+            <div class="max-w-4xl mx-auto relative flex items-center gap-2">
+                <div class="relative flex-1">
+                    <input type="text" id="userInput" 
+                           placeholder="Enter command or message..." 
+                           class="w-full bg-slate-900/80 border border-blue-900/50 rounded-2xl py-4 px-6 pr-12 focus:outline-none focus:border-blue-500 focus:ring-1 ring-blue-500 transition-all text-sm shadow-2xl">
+                    <button class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-blue-400">
+                        <i class="fas fa-paperclip"></i>
+                    </button>
+                </div>
+                <button onclick="sendMsg()" class="bg-blue-600 hover:bg-blue-500 text-white w-12 h-12 rounded-xl flex items-center justify-center shadow-lg shadow-blue-900/20 transition-all active:scale-95">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+            <p class="text-center text-[10px] text-slate-600 mt-3 uppercase tracking-[0.2em]">DevCORE v4.0 SECURED BY XDPZQ</p>
+        </footer>
+    </main>
+
+    <script>
+        // Sidebar Logic
+        function toggleSidebar() {
+            const sb = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            sb.classList.toggle('open');
+            overlay.classList.toggle('hidden');
+        }
+
+        // Auto Scroll to Bottom
+        const chatWin = document.getElementById('chat-window');
+        function scrollToBottom() {
+            chatWin.scrollTop = chatWin.scrollHeight;
+        }
+
+        // Send Message Simulation
+        async function sendMsg() {
+            const input = document.getElementById('userInput');
+            const text = input.value.trim();
+            if(!text) return;
+
+            // Append User Chat
+            appendChat('user', text);
+            input.value = '';
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ message: text })
+                });
+                const data = await response.json();
+                appendChat('ai', data.response);
+            } catch (e) {
+                appendChat('ai', 'Error: Neural Link Interrupted.');
+            }
+        }
+
+        function appendChat(role, msg) {
+            const div = document.createElement('div');
+            div.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in`;
+            div.innerHTML = `
+                <div class="max-w-[85%] md:max-w-[70%] ${role === 'user' ? 'bubble-user' : 'bubble-ai'} p-4 rounded-2xl text-sm leading-relaxed">
+                    ${msg}
+                </div>
+            `;
+            chatWin.appendChild(div);
+            scrollToBottom();
+        }
+
+        // Handle Enter Key
+        document.getElementById('userInput').addEventListener('keypress', (e) => {
+            if(e.key === 'Enter') sendMsg();
+        });
+    </script>
 </body>
 </html>
